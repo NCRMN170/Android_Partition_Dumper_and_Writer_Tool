@@ -205,7 +205,7 @@ while ($true) {
         $selectedPartitions = @()
 
         Show-Header
-        Write-Host "What do you want to do?" -ForegroundColor Yellow
+        Write-Host "Select an operation" -ForegroundColor Yellow
         Write-Host "1. DUMP (Backup Physical Partitions)"
         Write-Host "2. WRITE (Flash Physical Partitions)"
         Write-Host "3. DYNAMIC PARTITION (SUPER) OPERATIONS" -ForegroundColor Magenta
@@ -487,8 +487,12 @@ while ($true) {
                 Write-Host "1. Reboot Device Normally (ADB Reboot - Return to Android)"
                 Write-Host "G. GO BACK (To Selection Screen)" -ForegroundColor DarkCyan
                 
-                $actIn = ""
-                while ($actIn -notmatch "^[1gG]$") { $actIn = Read-Host "`nYour choice" }
+                Write-Host ""
+                $actIn = Read-Host "Your choice"
+                while ($actIn -notmatch "^[1gG]$") { 
+                    try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                    $actIn = Read-Host "Your choice" 
+                }
                 
                 if ($actIn -match "^[gG]$") { $state = "DUMP_SCAN_DEVICES"; continue } 
                 else {
@@ -519,8 +523,12 @@ while ($true) {
             Write-Host "1. Reboot Device Normally (Fastboot Reboot - Return to Android)"
             Write-Host "G. GO BACK (To Selection Screen)" -ForegroundColor DarkCyan
             
-            $actIn = ""
-            while ($actIn -notmatch "^[1gG]$") { $actIn = Read-Host "`nYour choice" }
+            Write-Host ""
+            $actIn = Read-Host "Your choice"
+            while ($actIn -notmatch "^[1gG]$") { 
+                try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                $actIn = Read-Host "Your choice" 
+            }
             
             if ($actIn -match "^[gG]$") { $state = "DUMP_SCAN_DEVICES"; continue } 
             else {
@@ -567,8 +575,12 @@ while ($true) {
             Write-Host "3. Manual (I will put the device into Recovery myself)"
             Write-Host "G. GO BACK (To Selection Screen)" -ForegroundColor DarkCyan
             
-            $rbIn = ""
-            while ($rbIn -notmatch "^[123gG]$") { $rbIn = Read-Host "Your choice" }
+            Write-Host ""
+            $rbIn = Read-Host "Your choice"
+            while ($rbIn -notmatch "^[123gG]$") { 
+                try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                $rbIn = Read-Host "Your choice" 
+            }
             
             if ($rbIn -match "^[gG]$") { 
                 if ($operation -eq "1") { $state = "DUMP_SCAN_DEVICES" } else { $state = "FOLDER_MENU" }
@@ -1185,8 +1197,13 @@ while ($true) {
         Write-Host "to compensate for partitions that cannot be written via fastboot (e.g. TWRP, OrangeFox)." -ForegroundColor Yellow
         Write-Host "When the Fastboot stage is finished, your device must have a Custom Recovery installed." -ForegroundColor Yellow
         
-        $fbConf = Read-Host "`nDo you want to continue? (Y/N)"
-        if ($fbConf -notmatch "^[yY]$") { $state = "WRITE_MENU"; continue }
+        Write-Host ""
+        $fbConf = Read-Host "Do you want to continue? (Y/N)"
+        while ($fbConf -notmatch "^[yYnN]$") { 
+            try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+            $fbConf = Read-Host "Do you want to continue? (Y/N)" 
+        }
+        if ($fbConf -match "^[nN]$") { $state = "WRITE_MENU"; continue }
 
         if (-not $selectedDevice.IsFastboot) {
             Show-Header
@@ -1237,8 +1254,12 @@ while ($true) {
             Write-Host "2. OEM Command (fastboot oem reboot-recovery)"
             Write-Host "3. Manual (I will put the device into Recovery myself)"
             
-            $rbIn = ""
-            while ($rbIn -notmatch "^[123]$") { $rbIn = Read-Host "Your choice" }
+            Write-Host ""
+            $rbIn = Read-Host "Your choice"
+            while ($rbIn -notmatch "^[123]$") { 
+                try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                $rbIn = Read-Host "Your choice" 
+            }
             
             $fbRebootArgs = @(); if ($targetSerial) { $fbRebootArgs += "-s"; $fbRebootArgs += $targetSerial }
             
@@ -1302,7 +1323,12 @@ while ($true) {
             
             if ($hasABSlots -and -not $slotChanged) {
                 Write-Host "`nA/B slot architecture detected on this device." -ForegroundColor DarkCyan
+                
                 $actAns = Read-Host "Do you want to change the 'Active Slot' of the device? (Y/N)"
+                while ($actAns -notmatch "^[yYnN]$") { 
+                    try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                    $actAns = Read-Host "Do you want to change the 'Active Slot' of the device? (Y/N)" 
+                }
                 
                 if ($actAns -match "^[yY]$") {
                     if (-not $selectedDevice.IsFastboot) {
@@ -1324,8 +1350,12 @@ while ($true) {
                         if ($writtenA -gt 0 -and $writtenB -eq 0) { Write-Host "`nHINT: The flashed backup files only contained slot 'A'." -ForegroundColor Magenta } 
                         elseif ($writtenB -gt 0 -and $writtenA -eq 0) { Write-Host "`nHINT: The flashed backup files only contained slot 'B'." -ForegroundColor Magenta }
                         
-                        $slotAns = ""
-                        while ($slotAns -notmatch "^[aAbB]$") { $slotAns = Read-Host "`nWhich slot should be made active? (A / B)" }
+                        Write-Host ""
+                        $slotAns = Read-Host "Which slot should be made active? (A / B)"
+                        while ($slotAns -notmatch "^[aAbB]$") { 
+                            try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                            $slotAns = Read-Host "Which slot should be made active? (A / B)" 
+                        }
                         $tgtSlot = $slotAns.ToLower()
                         
                         Write-Host "`nSetting active slot to $tgtSlot..." -ForegroundColor Yellow
@@ -1356,8 +1386,12 @@ while ($true) {
                 Write-Host "4. Wipe Device (fastboot -w)" -ForegroundColor Magenta
                 Write-Host "5. Return to Main Menu"
                 
-                $rbIn = ""
-                while ($rbIn -notmatch "^[12345]$") { $rbIn = Read-Host "`nYour choice" }
+                Write-Host ""
+                $rbIn = Read-Host "Your choice"
+                while ($rbIn -notmatch "^[12345]$") { 
+                    try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                    $rbIn = Read-Host "Your choice" 
+                }
                 
                 if ($rbIn -eq "5") { $state = "MAIN"; break }
                 
@@ -1368,7 +1402,13 @@ while ($true) {
                 elseif ($rbIn -eq "3") { $fbArgs += "oem"; $fbArgs += "reboot-recovery"; & $fb $fbArgs | Out-Null; Write-Host "Opening recovery..." -ForegroundColor Green; Start-Sleep -Seconds 2; $state = "MAIN"; break }
                 elseif ($rbIn -eq "4") {
                     Write-Host "`n[!] WARNING: This operation will wipe ALL DATA on the device!" -ForegroundColor Red
+                    
                     $wipeAns = Read-Host "Are you sure? (Y/N)"
+                    while ($wipeAns -notmatch "^[yYnN]$") { 
+                        try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                        $wipeAns = Read-Host "Are you sure? (Y/N)" 
+                    }
+                    
                     if ($wipeAns -match "^[yY]$") {
                         Write-Host "`nWiping data (fastboot -w)..." -ForegroundColor Yellow
                         $wipeArgs = @(); if ($targetSerial) { $wipeArgs += "-s"; $wipeArgs += $targetSerial }
@@ -1389,8 +1429,12 @@ while ($true) {
                 Write-Host "4. Wipe Device (fastboot -w)" -ForegroundColor Magenta
                 Write-Host "5. Return to Main Menu"
                 
-                $rbIn = ""
-                while ($rbIn -notmatch "^[12345]$") { $rbIn = Read-Host "`nYour choice" }
+                Write-Host ""
+                $rbIn = Read-Host "Your choice"
+                while ($rbIn -notmatch "^[12345]$") { 
+                    try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                    $rbIn = Read-Host "Your choice" 
+                }
                 
                 if ($rbIn -eq "5") { $state = "MAIN"; break }
                 
@@ -1399,7 +1443,13 @@ while ($true) {
                 elseif ($rbIn -eq "3") { & $adb -s $targetSerial reboot bootloader | Out-Null; Write-Host "Opening bootloader..." -ForegroundColor Green; Start-Sleep -Seconds 2; $state = "MAIN"; break }
                 elseif ($rbIn -eq "4") {
                     Write-Host "`n[!] WARNING: This operation will wipe ALL DATA on the device!" -ForegroundColor Red
+                    
                     $wipeAns = Read-Host "Are you sure? (Y/N)"
+                    while ($wipeAns -notmatch "^[yYnN]$") { 
+                        try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                        $wipeAns = Read-Host "Are you sure? (Y/N)" 
+                    }
+                    
                     if ($wipeAns -match "^[yY]$") {
                         Write-Host "`nSwitching device to Fastboot mode..." -ForegroundColor Yellow
                         & $adb -s $targetSerial reboot bootloader | Out-Null
