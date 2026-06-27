@@ -13,7 +13,7 @@
 
 ### ⚙️ Technical Specifications
 
-- **Uses PowerShell and CMD**
+- **Uses PowerShell , CMD , ADB**
 - **Requires root access in Android mode**
 - **Requires a custom recovery in recovery mode.**
 - **Dynamic partition read and write options** (errors may occur when reading large dynamic sections)
@@ -30,4 +30,9 @@
 
 - **This program was developed using AI.**
 - **It is open-source software.**
+- **This program is WinRAR SFX archive.**
+- **Platform-Tools from https://developer.android.com**
 - **I do not consent to any form of revenue generation from this program.**
+
+---
+[Dowload](./../../releases)
