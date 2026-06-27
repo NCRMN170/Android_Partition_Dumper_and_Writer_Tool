@@ -205,7 +205,7 @@ while ($true) {
         $selectedPartitions = @()
 
         Show-Header
-        Write-Host "Ne yapmak istiyorsunuz?" -ForegroundColor Yellow
+        Write-Host "Yapmak istediginiz islemi seciniz." -ForegroundColor Yellow
         Write-Host "1. DUMP (Fiziksel Bolumleri Yedekle)"
         Write-Host "2. WRITE (Fiziksel Bolumleri Yazdir)"
         Write-Host "3. DINAMIK BOLUM (SUPER) ISLEMLERI" -ForegroundColor Magenta
@@ -487,8 +487,12 @@ while ($true) {
                 Write-Host "1. Cihazi Normal Baslat (ADB Reboot - Android'e don)"
                 Write-Host "G. GERI DON (Secim Ekranina)" -ForegroundColor DarkCyan
                 
-                $actIn = ""
-                while ($actIn -notmatch "^[1gG]$") { $actIn = Read-Host "`nSeciminiz" }
+                Write-Host ""
+                $actIn = Read-Host "Seciminiz"
+                while ($actIn -notmatch "^[1gG]$") { 
+                    try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                    $actIn = Read-Host "Seciminiz" 
+                }
                 
                 if ($actIn -match "^[gG]$") { $state = "DUMP_SCAN_DEVICES"; continue } 
                 else {
@@ -519,8 +523,12 @@ while ($true) {
             Write-Host "1. Cihazi Normal Baslat (Fastboot Reboot - Android'e don)"
             Write-Host "G. GERI DON (Secim Ekranina)" -ForegroundColor DarkCyan
             
-            $actIn = ""
-            while ($actIn -notmatch "^[1gG]$") { $actIn = Read-Host "`nSeciminiz" }
+            Write-Host ""
+            $actIn = Read-Host "Seciminiz"
+            while ($actIn -notmatch "^[1gG]$") { 
+                try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                $actIn = Read-Host "Seciminiz" 
+            }
             
             if ($actIn -match "^[gG]$") { $state = "DUMP_SCAN_DEVICES"; continue } 
             else {
@@ -567,8 +575,12 @@ while ($true) {
             Write-Host "3. Manuel (Cihazi kendim Recovery'e alacagim)"
             Write-Host "G. GERI DON (Secim Ekranina)" -ForegroundColor DarkCyan
             
-            $rbIn = ""
-            while ($rbIn -notmatch "^[123gG]$") { $rbIn = Read-Host "Seciminiz" }
+            Write-Host ""
+            $rbIn = Read-Host "Seciminiz"
+            while ($rbIn -notmatch "^[123gG]$") { 
+                try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                $rbIn = Read-Host "Seciminiz" 
+            }
             
             if ($rbIn -match "^[gG]$") { 
                 if ($operation -eq "1") { $state = "DUMP_SCAN_DEVICES" } else { $state = "FOLDER_MENU" }
@@ -1185,8 +1197,13 @@ while ($true) {
         Write-Host "TWRP,OrangeFox gibi ADB baglantisine sahip bir Custom Recovery'ye GECIS YAPAR." -ForegroundColor Yellow
         Write-Host "Fastboot asamasi bittiginde cihazinizde Custom Recovery yuklu olmalidir. " -ForegroundColor Yellow
         
-        $fbConf = Read-Host "`nDevam etmek istiyor musunuz? (E/H)"
-        if ($fbConf -notmatch "^[eE]$") { $state = "WRITE_MENU"; continue }
+        Write-Host ""
+        $fbConf = Read-Host "Devam etmek istiyor musunuz? (E/H)"
+        while ($fbConf -notmatch "^[eEhH]$") { 
+            try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+            $fbConf = Read-Host "Devam etmek istiyor musunuz? (E/H)" 
+        }
+        if ($fbConf -match "^[hH]$") { $state = "WRITE_MENU"; continue }
 
         if (-not $selectedDevice.IsFastboot) {
             Show-Header
@@ -1237,8 +1254,11 @@ while ($true) {
             Write-Host "2. OEM Komutu (fastboot oem reboot-recovery)"
             Write-Host "3. Manuel (Cihazi kendim Recovery'e alacagim)"
             
-            $rbIn = ""
-            while ($rbIn -notmatch "^[123]$") { $rbIn = Read-Host "Seciminiz" }
+            $rbIn = Read-Host "Seciminiz"
+            while ($rbIn -notmatch "^[123]$") { 
+                try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                $rbIn = Read-Host "Seciminiz" 
+            }
             
             $fbRebootArgs = @(); if ($targetSerial) { $fbRebootArgs += "-s"; $fbRebootArgs += $targetSerial }
             
@@ -1302,7 +1322,12 @@ while ($true) {
             
             if ($hasABSlots -and -not $slotChanged) {
                 Write-Host "`nBu cihazda A/B slot mimarisi tespit edildi." -ForegroundColor DarkCyan
+                
                 $actAns = Read-Host "Cihazin 'Aktif Slotunu' degistirmek ister misiniz? (E/H)"
+                while ($actAns -notmatch "^[eEhH]$") { 
+                    try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                    $actAns = Read-Host "Cihazin 'Aktif Slotunu' degistirmek ister misiniz? (E/H)" 
+                }
                 
                 if ($actAns -match "^[eE]$") {
                     if (-not $selectedDevice.IsFastboot) {
@@ -1324,8 +1349,12 @@ while ($true) {
                         if ($writtenA -gt 0 -and $writtenB -eq 0) { Write-Host "`nIPUCU: Yuklenen yedek dosyalarinda yalnizca 'A' slotu vardi." -ForegroundColor Magenta } 
                         elseif ($writtenB -gt 0 -and $writtenA -eq 0) { Write-Host "`nIPUCU: Yuklenen yedek dosyalarinda yalnizca 'B' slotu vardi." -ForegroundColor Magenta }
                         
-                        $slotAns = ""
-                        while ($slotAns -notmatch "^[aAbB]$") { $slotAns = Read-Host "`nHangi slot aktif edilsin? (A / B)" }
+                        Write-Host ""
+                        $slotAns = Read-Host "Hangi slot aktif edilsin? (A / B)"
+                        while ($slotAns -notmatch "^[aAbB]$") { 
+                            try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                            $slotAns = Read-Host "Hangi slot aktif edilsin? (A / B)" 
+                        }
                         $tgtSlot = $slotAns.ToLower()
                         
                         Write-Host "`nAktif slot $tgtSlot olarak ayarlaniyor..." -ForegroundColor Yellow
@@ -1356,8 +1385,12 @@ while ($true) {
                 Write-Host "4. Cihazi Sifirla (fastboot -w)" -ForegroundColor Magenta
                 Write-Host "5. Ana Menu'ye Don"
                 
-                $rbIn = ""
-                while ($rbIn -notmatch "^[12345]$") { $rbIn = Read-Host "`nSeciminiz" }
+                Write-Host ""
+                $rbIn = Read-Host "Seciminiz"
+                while ($rbIn -notmatch "^[12345]$") { 
+                    try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                    $rbIn = Read-Host "Seciminiz" 
+                }
                 
                 if ($rbIn -eq "5") { $state = "MAIN"; break }
                 
@@ -1368,7 +1401,13 @@ while ($true) {
                 elseif ($rbIn -eq "3") { $fbArgs += "oem"; $fbArgs += "reboot-recovery"; & $fb $fbArgs | Out-Null; Write-Host "Recovery aciliyor..." -ForegroundColor Green; Start-Sleep -Seconds 2; $state = "MAIN"; break }
                 elseif ($rbIn -eq "4") {
                     Write-Host "`n[!] UYARI: Bu islem cihazdaki TUM VERILERI silecektir!" -ForegroundColor Red
+                    
                     $wipeAns = Read-Host "Emin misiniz? (E/H)"
+                    while ($wipeAns -notmatch "^[eEhH]$") { 
+                        try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                        $wipeAns = Read-Host "Emin misiniz? (E/H)" 
+                    }
+                    
                     if ($wipeAns -match "^[eE]$") {
                         Write-Host "`nVeriler siliniyor (fastboot -w)..." -ForegroundColor Yellow
                         $wipeArgs = @(); if ($targetSerial) { $wipeArgs += "-s"; $wipeArgs += $targetSerial }
@@ -1389,8 +1428,12 @@ while ($true) {
                 Write-Host "4. Cihazi Sifirla (fastboot -w)" -ForegroundColor Magenta
                 Write-Host "5. Ana Menu'ye Don"
                 
-                $rbIn = ""
-                while ($rbIn -notmatch "^[12345]$") { $rbIn = Read-Host "`nSeciminiz" }
+                Write-Host ""
+                $rbIn = Read-Host "Seciminiz"
+                while ($rbIn -notmatch "^[12345]$") { 
+                    try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                    $rbIn = Read-Host "Seciminiz" 
+                }
                 
                 if ($rbIn -eq "5") { $state = "MAIN"; break }
                 
@@ -1399,7 +1442,13 @@ while ($true) {
                 elseif ($rbIn -eq "3") { & $adb -s $targetSerial reboot bootloader | Out-Null; Write-Host "Bootloader aciliyor..." -ForegroundColor Green; Start-Sleep -Seconds 2; $state = "MAIN"; break }
                 elseif ($rbIn -eq "4") {
                     Write-Host "`n[!] UYARI: Bu islem cihazdaki TUM VERILERI silecektir!" -ForegroundColor Red
+                    
                     $wipeAns = Read-Host "Emin misiniz? (E/H)"
+                    while ($wipeAns -notmatch "^[eEhH]$") { 
+                        try { $p=$Host.UI.RawUI.CursorPosition; $p.Y-=1; $Host.UI.RawUI.CursorPosition=$p; Write-Host (" " * 100) -NoNewline; $Host.UI.RawUI.CursorPosition=$p } catch{}
+                        $wipeAns = Read-Host "Emin misiniz? (E/H)" 
+                    }
+                    
                     if ($wipeAns -match "^[eE]$") {
                         Write-Host "`nCihaz Fastboot moduna aliniyor..." -ForegroundColor Yellow
                         & $adb -s $targetSerial reboot bootloader | Out-Null
