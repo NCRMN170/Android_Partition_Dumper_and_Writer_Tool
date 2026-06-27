@@ -16,7 +16,7 @@
 - **Uses PowerShell and CMD**
 - **Requires root access in Android mode**
 - **Requires a custom recovery in recovery mode.**
-- **Dynamic partition read and write options**
+- **Dynamic partition read and write options** (errors may occur when reading large dynamic sections)
 
 ---
 
