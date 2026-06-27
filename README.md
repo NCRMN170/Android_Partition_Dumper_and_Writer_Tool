@@ -16,7 +16,7 @@
 - **PowerShell ve CMD kullanır**
 - **Android modunda root erişimi gerekir**
 - **Recovery modunda costum recovery gerekir**
-- **Dinamik bölümleri okuma ve yazma desteği vardır**
+- **Dinamik bölümleri okuma ve yazma desteği vardır** (boyutu büyük dinamik bölümler okunurken hata oluşabilir)
 
 ---
 
