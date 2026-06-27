@@ -7,13 +7,13 @@
 
 #  APDWT - Android Partition Dumper & Writer Tool
 
-> Android cihazlarda bölümleri yedeklemek ve yazmak için ayrıntılı, etkili ve basit bir program.
+> Android cihazlarda bölümleri yedeklemek ve yazmak için ayrıntılı, etkili , basit bir program.
 
 ---
 
 ### ⚙️ Teknik Detaylar
 
-- **PowerShell ve CMD kullanır**
+- **PowerShell , CMD , ADB kullanır**
 - **Android modunda root erişimi gerekir**
 - **Recovery modunda costum recovery gerekir**
 - **Dinamik bölümleri okuma ve yazma desteği vardır** (boyutu büyük dinamik bölümler okunurken hata oluşabilir)
@@ -30,4 +30,9 @@
 
 - **Bu program AI kullanılarak geliştirilmiştir.**
 - **Açık kaynaklı bir programdır.**
+- **WinRAR SFX arşividir.**
+- **Platform-Tools https://developer.android.com dan alındı.**
 - **Bu programdan herhangi bir şekilde gelir elde edilmesine razı değilim.**
+
+---  
+[Dowload](./../../releases)
